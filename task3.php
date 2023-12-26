@@ -32,8 +32,7 @@ function load_users_data($user_ids, $conn)
     return $data;
 }
 
-//$user_ids = isset($_GET['user_ids']) ? $_GET['user_ids'] : '';
-$user_ids='4';
+$user_ids = isset($_GET['user_ids']) ? $_GET['user_ids'] : '';
 
 // DB parameters
 $db_host     = "localhost";
