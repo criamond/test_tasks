@@ -4,6 +4,8 @@
  *
  * @param   string  $user_ids  users IDs.
  *
+ * @param    $conn  mysqli connection to MySQL.
+ *
  * @return array Associative array of user data.
  */
 function load_users_data($user_ids, $conn)
@@ -18,21 +20,20 @@ function load_users_data($user_ids, $conn)
 
     $sql = "SELECT * FROM users WHERE id IN ($idsString)";
 
-    $result = $conn->query($sql);
-
-    if ($result === false) {
-        die("Error: ".$conn->error);
-    }
-
     $data = [];
-    while ($row = $result->fetch_assoc()) {
-        $data[$row['id']] = $row['name'];
+    try {
+        $result = $conn->query($sql);
+        while ($row = $result->fetch_assoc()) {
+            $data[$row['id']] = $row['name'];
+        }
+    } catch (Exception $e){
     }
 
     return $data;
 }
 
-$user_ids = isset($_GET['user_ids']) ? $_GET['user_ids'] : '';
+//$user_ids = isset($_GET['user_ids']) ? $_GET['user_ids'] : '';
+$user_ids='4';
 
 // DB parameters
 $db_host     = "localhost";
@@ -51,5 +52,5 @@ $data = load_users_data($user_ids, $conn);
 $conn->close();
 
 foreach ($data as $user_id => $name) {
-    echo "<a href=\"/show_user.php?id=".htmlspecialchars($user_id)."\">".htmlspecialchars($name)."</a>";
+    echo "<a href=\"/show_user.php?id=".$user_id."\">".htmlspecialchars($name)."</a>";
 }
